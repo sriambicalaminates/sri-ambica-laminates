@@ -5,3 +5,14 @@
 body{
   background-color: "FFF0DC";
 }
+
+@font-face {
+  font-family: 'fo';
+  src: url('/fonts/RobotSlab-VariableFont_wght.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.pt {
+  font-family: 'fo', sans-serif;
+}

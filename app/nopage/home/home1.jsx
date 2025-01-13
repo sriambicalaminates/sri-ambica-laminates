@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default function LandingPage() {
     return (
-        <div className="relative h-96 flex flex-col lv mt-2">
+        <div className="relative h-96 flex flex-col lv mt-2 ">
             {/* Background Image */}
             <div className="hidden md:flex relative w-full h-auto">
                 <Image
