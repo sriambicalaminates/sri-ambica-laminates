@@ -12,7 +12,8 @@ export default {
         foreground: "var(--foreground)",
         gold: "#AF8553",
         back: "#FFF0DC",
-        brown: "#9C5518"
+        brown: "#9C5518",
+        dback: "#fce8bc"
       },
     },
   },
