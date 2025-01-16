@@ -12,7 +12,7 @@ import H1 from "../../../public/H1.png"
 export default function GallerySection() {
     return (
         <>
-            <section className="text-gray-600  bg-back mt-64 md:mt-28 rounded-xl">
+            <section className="text-gray-600  bg-back mt-2 rounded-xl">
                 <div className="px-5 py-6 mx-auto">
                     {/* Heading */}
                     <div className="flex flex-col text-center justify-center w-full mb-6">
