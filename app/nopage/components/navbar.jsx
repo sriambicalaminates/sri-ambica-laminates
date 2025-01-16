@@ -12,9 +12,9 @@ export default function NavBar() {
 
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "Service", href: "/service" },
+    { name: "Services", href: "/services" },
     { name: "About", href: "/about" },
-    { name: "Lorem", href: "/lorem" },
+    { name: "Why us?", href: "/why-us" },
   ];
 
   return (
@@ -22,6 +22,7 @@ export default function NavBar() {
       {/* Desktop Navbar */}
       <div className="hidden md:flex items-center justify-between px-8 py-4 bg-back border-b-2 rounded-xl">
         {/* Logo Section */}
+        <Link href="/">
         <div className="flex items-center">
           <Image
             src={Logo}
@@ -30,7 +31,7 @@ export default function NavBar() {
             height={80}
           />
         </div>
-
+        </Link>
         {/* Navigation Links */}
         <nav className="flex space-x-8 text-gray-600 font-medium">
           {navLinks.map((link) => (

@@ -110,7 +110,7 @@ export default function GallerySection() {
 
           {/* View More Button */}
           <div className="flex justify-end mt-6">
-            <Link href="https://drive.google.com/file/d/1kxavbFfI0g7nRAlpnofjacBCpcCAe7vL/view?usp=sharing" target="_blank">
+            <Link href="https://drive.google.com/file/d/1iGWGbpxvigYdqH0X7k_usdWjeQS6BWw8/view" target="_blank">
               <button className="px-6 py-2 hover:text-white border-brown border-2 text-brown rounded-lg shadow-md hover:bg-brown transition-all duration-300">
                 View More
               </button>
