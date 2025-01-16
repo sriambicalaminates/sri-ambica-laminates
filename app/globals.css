@@ -16,3 +16,27 @@ body{
 .pt {
   font-family: 'fo', sans-serif;
 }
+
+
+@keyframes scale-up {
+  0% {
+    transform: scale(0.2);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  75%{
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(0);
+    opacity: 1;
+  }
+}
+
+.animate-scale-up {
+  animation: scale-up 2.9s ease-in-out;
+}

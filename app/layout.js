@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./nopage/components/navbar"
 import Footer from "./nopage/components/footer"
+import Preloader from "./nopage/components/preloader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,9 +26,10 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <div className="p-2 bg-white">
-        <Navbar/>
-        {children}
-        <Footer/>
+        <Preloader />
+          <Navbar />
+          {children}
+          <Footer />
         </div>
       </body>
     </html>
