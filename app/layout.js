@@ -87,7 +87,7 @@ export default function RootLayout({ children }) {
         {/* Google Analytics */}
        
         {/* Favicon */}
-        <link rel="icon" href="/Logo1.png" sizes="any" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
       </Head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
