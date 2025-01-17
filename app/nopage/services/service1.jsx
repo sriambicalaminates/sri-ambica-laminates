@@ -1,8 +1,23 @@
+"use client"
+
 import Link from "next/link";
 import Image from "next/image";
 import S1 from "../../../public/P1.png"
+import useInView from "../components/useInView";
+import React, { useRef } from 'react';
 
 export default function Services() {
+
+  const oneRef = useRef(null);
+  const twoRef = useRef(null);
+  const threeRef = useRef(null);
+  const fourRef = useRef(null);
+
+  const oneInView = useInView(oneRef);
+  const twoInView = useInView(twoRef);
+  const threeInView = useInView(threeRef);
+  const fourInView = useInView(fourRef);
+
   return (
     <div className="">
       {/* Header */}
@@ -17,7 +32,7 @@ export default function Services() {
       <div className=" mt-2 rounded-xl px-4 py-12 bg-back">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Service 1 */}
-          <div className="bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform">
+          <div ref={oneRef} className={`bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform ${oneInView ? 'animate-zoom-in' : ''}`}>
             <div className="h-56 bg-cover bg-center" style={{ backgroundImage: `url('/S2.jpg')` }}></div>
             <div className="p-6">
               <h2 className="text-2xl font-bold text-black">Same-Day & Next-Day Delivery</h2>
@@ -28,7 +43,7 @@ export default function Services() {
           </div>
           
           {/* Service 2 */}
-          <div className="bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform">
+          <div ref={twoRef} className={`bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform ${twoInView ? 'animate-zoom-in' : ''}`}>
             <div className="h-56 bg-cover bg-center" style={{ backgroundImage: `url('/S4.png')` }}></div>
             <div className="p-6">
               <h2 className="text-2xl font-bold text-black">Premium Laminate Sheets</h2>
@@ -38,7 +53,7 @@ export default function Services() {
             </div>
           </div>
           {/* Service 3 */}
-          <div className="bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform">
+          <div ref={threeRef} className={`bg-white shadow-lg rounded-lg overflow-hidden hover:scale-105 transition-transform ${threeInView ? 'animate-zoom-in' : ''}`}>
             <div className="h-56 bg-cover bg-center" style={{ backgroundImage: `url('/S3.png')` }}></div>
             <div className="p-6">
               <h2 className="text-2xl font-bold text-black">24/7 Call & WhatsApp Support</h2>
@@ -87,7 +102,7 @@ export default function Services() {
           <p className="mt-4 text-gray-900">
             Whether you're a retailer or designer, our laminates are crafted to exceed expectations.
           </p>
-          <div className="mt-6 space-x-4">
+          <div ref={fourRef} className={`mt-6 space-x-4 ${fourInView ? 'animate-fade-in-up' : ''}`}>
             <Link
               href="/contact"
               className="px-6 py-3 border-brown border-2 text-brown font-bold rounded-lg hover:bg-brown hover:text-white transition"

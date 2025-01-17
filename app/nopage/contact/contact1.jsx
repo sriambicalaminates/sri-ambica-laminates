@@ -1,8 +1,21 @@
+"use client"
 import Image from 'next/image';
 import Ow1 from "../../../public/Ow1.png"
 import Ow2 from "../../../public/Ow2.png"
+import useInView from "../components/useInView";
+import React, { useRef } from 'react';
 
 export default function ContactUs() {
+    const oneRef = useRef(null);
+    const twoRef = useRef(null);
+    const threeRef = useRef(null);
+    const fourRef = useRef(null);
+  
+    const oneInView = useInView(oneRef);
+    const twoInView = useInView(twoRef);
+    const threeInView = useInView(threeRef);
+    const fourInView = useInView(fourRef);
+
     return (
         <div className="">
             {/* Header */}
@@ -27,7 +40,7 @@ export default function ContactUs() {
                             <h3 className="text-xl font-bold text-brown mb-4">Our Team</h3>
                             <div className="space-y-6">
                                 {/* Owner 1 */}
-                                <div className="p-2 w-full">
+                                <div ref={oneRef} className={`p-2 w-full ${oneInView ? 'animate-fade-in-left' : ''}`} >
                                     <a href="https://wa.me/917016079345" target="_blank" rel="noopener noreferrer">
                                         <div className="h-full flex items-center border-brown border p-4 rounded-lg hover:bg-brown hover:text-white transition">
                                             <Image
@@ -44,7 +57,7 @@ export default function ContactUs() {
                                 </div>
 
                                 {/* Owner 2 */}
-                                <div className="p-2 w-full">
+                                <div ref={twoRef} className={`p-2 w-full ${twoInView ? 'animate-fade-in-left' : ''}`} >
                                     <a href="https://wa.me/916354531450" target="_blank" rel="noopener noreferrer">
                                         <div className="h-full flex items-center border-brown border p-4 rounded-lg hover:bg-brown hover:text-white transition">
                                             <Image
@@ -65,7 +78,7 @@ export default function ContactUs() {
                     </div>
 
                     {/* Google Maps Section */}
-                    <div className="relative overflow-hidden rounded-lg shadow-lg">
+                    <div ref={threeRef} className={`relative overflow-hidden rounded-lg shadow-lg ${threeInView ? 'animate-fade-in-right' : ''}`} >
                         <iframe
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3807.718457070704!2d78.45498427540292!3d17.377275483508164!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bcb9784e325fe5d%3A0x484ef2522d985b96!2ssri%20ambica%20laminate!5e0!3m2!1sen!2sin!4v1737008357441!5m2!1sen!2sin"
                             width="100%"

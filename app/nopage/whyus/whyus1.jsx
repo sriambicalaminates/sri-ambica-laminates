@@ -3,7 +3,12 @@
 import CountUp from "react-countup";
 import { useEffect, useState } from "react";
 
+
 export default function WhyUs() {
+
+  
+
+
   const [isVisible, setIsVisible] = useState(false);
 
   // Intersection Observer to trigger count-up animation
