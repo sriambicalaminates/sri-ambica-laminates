@@ -62,6 +62,7 @@ export default function NavBar() {
       {/* Mobile Navbar */}
       <div className="md:hidden flex items-center justify-between px-4 py-4 bg-back border-b-2 rounded-xl">
         {/* Logo Section */}
+        <Link href="/">
         <div className="flex items-center">
           <Image
             src={Logo}
@@ -70,7 +71,7 @@ export default function NavBar() {
             height={80}
           />
         </div>
-
+        </Link>
         {/* Hamburger Icon */}
         <div className="flex">
         <Link href="/contact">
