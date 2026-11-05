@@ -51,17 +51,32 @@ function FinishSwitcher() {
   const rotateY = useTransform(sx, [-0.5, 0.5], [-9, 9]);
   const rotateX = useTransform(sy, [-0.5, 0.5], [8, -8]);
 
+  // Mouse-only: tilt + hover-pause never fire from touch
   const onMove = (e) => {
+    if (e.pointerType && e.pointerType !== "mouse") return;
     const el = boxRef.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
     mx.set((e.clientX - r.left) / r.width - 0.5);
     my.set((e.clientY - r.top) / r.height - 0.5);
   };
-  const onLeave = () => {
+  const onLeave = (e) => {
+    if (e?.pointerType && e.pointerType !== "mouse") return;
     mx.set(0);
     my.set(0);
     setPaused(false);
+  };
+
+  // Touch: swipe left/right to change finish
+  const touchX = useRef(null);
+  const onTouchStart = (e) => {
+    touchX.current = e.touches[0].clientX;
+  };
+  const onTouchEnd = (e) => {
+    if (touchX.current == null) return;
+    const dx = e.changedTouches[0].clientX - touchX.current;
+    touchX.current = null;
+    if (Math.abs(dx) > 40) setActive((a) => (dx < 0 ? (a + 1) % n : (a - 1 + n) % n));
   };
 
   return (
@@ -69,7 +84,7 @@ function FinishSwitcher() {
       initial={{ opacity: 0, y: 50, scale: 0.96 }}
       animate={ready ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 50, scale: 0.96 }}
       transition={{ duration: 1.3, ease: EASE, delay: 0.25 }}
-      className="relative mx-auto w-full max-w-[420px] lg:max-w-[460px]"
+      className="relative mx-auto w-full max-w-[250px] min-[360px]:max-w-[280px] min-[400px]:max-w-[320px] sm:max-w-[400px] md:max-w-[420px] lg:max-w-[460px]"
     >
       {/* Tone glow that follows the active finish */}
       <motion.div
@@ -81,10 +96,12 @@ function FinishSwitcher() {
 
       <div
         ref={boxRef}
-        onMouseMove={onMove}
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={onLeave}
-        className="relative"
+        onPointerMove={onMove}
+        onPointerEnter={(e) => e.pointerType === "mouse" && setPaused(true)}
+        onPointerLeave={onLeave}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+        className="relative touch-pan-y"
         style={{ perspective: 1200 }}
       >
         {/* Peeking sheets behind the card */}
@@ -94,20 +111,17 @@ function FinishSwitcher() {
             <div
               key={offset}
               aria-hidden="true"
-              className="absolute inset-0 overflow-hidden rounded-[2rem] shadow-[0_20px_50px_-24px_rgba(16,24,40,0.5)]"
-              style={{
-                transform:
-                  offset === 1
-                    ? "translate(7%, 3%) rotate(5deg)"
-                    : "translate(-8%, 2%) rotate(-6deg)",
-                opacity: offset === 1 ? 0.95 : 0.8,
-              }}
+              className={`absolute inset-0 overflow-hidden rounded-[1.6rem] shadow-[0_20px_50px_-24px_rgba(16,24,40,0.5)] sm:rounded-[2rem] ${
+                offset === 1
+                  ? "translate-x-[4%] translate-y-[2%] rotate-[3deg] opacity-95 sm:translate-x-[7%] sm:translate-y-[3%] sm:rotate-[5deg]"
+                  : "-translate-x-[4%] translate-y-[1.5%] -rotate-[3.5deg] opacity-80 sm:-translate-x-[8%] sm:translate-y-[2%] sm:-rotate-[6deg]"
+              }`}
             >
               <Image
                 src={f.img}
                 alt=""
                 fill
-                sizes="(max-width: 1024px) 80vw, 460px"
+                sizes="(max-width: 640px) 60vw, 460px"
                 className="object-cover"
               />
               <div className="absolute inset-0 bg-ivory/20" />
@@ -118,7 +132,7 @@ function FinishSwitcher() {
         {/* Main finish card */}
         <motion.div
           style={{ rotateX, rotateY, transformPerspective: 1200 }}
-          className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-paper shadow-[0_40px_80px_-30px_rgba(16,24,40,0.55)] ring-1 ring-ink/10"
+          className="relative aspect-[4/5] overflow-hidden rounded-[1.6rem] bg-paper shadow-[0_40px_80px_-30px_rgba(16,24,40,0.55)] ring-1 ring-ink/10 sm:rounded-[2rem]"
         >
           <AnimatePresence initial={false}>
             <motion.div
@@ -134,7 +148,7 @@ function FinishSwitcher() {
                 alt={`${current.name} laminate finish`}
                 fill
                 priority={active === 0}
-                sizes="(max-width: 1024px) 80vw, 460px"
+                sizes="(max-width: 640px) 80vw, 460px"
                 className="object-cover"
               />
             </motion.div>
@@ -144,14 +158,14 @@ function FinishSwitcher() {
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/25 via-transparent to-ink/20" />
 
           {/* top chip */}
-          <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full bg-ivory/90 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-ink backdrop-blur">
+          <div className="absolute left-3 top-3 flex items-center gap-2 rounded-full bg-ivory/90 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-ink backdrop-blur sm:left-4 sm:top-4 sm:px-3.5 sm:text-[11px]">
             <span className="tabular-nums">0{active + 1}</span>
             <span className="h-3 w-px bg-ink/25" />
             <span className="text-ink/60">{current.type}</span>
           </div>
 
           {/* label */}
-          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/75 via-ink/30 to-transparent p-5 pt-16 text-ivory">
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink/75 via-ink/30 to-transparent p-4 pt-14 text-ivory sm:p-5 sm:pt-16">
             <AnimatePresence mode="wait">
               <motion.div
                 key={current.id}
@@ -165,7 +179,7 @@ function FinishSwitcher() {
                     {current.code}
                   </p>
                 )}
-                <p className="mt-1 font-display text-2xl font-medium leading-tight md:text-[1.7rem]">
+                <p className="mt-1 font-display text-xl font-medium leading-tight sm:text-2xl md:text-[1.7rem]">
                   {current.name}
                 </p>
               </motion.div>
@@ -175,7 +189,7 @@ function FinishSwitcher() {
           {/* laminate "peel" corner */}
           <div
             aria-hidden="true"
-            className="absolute bottom-0 right-0 h-14 w-14 transition-all duration-500 ease-expo hover:h-20 hover:w-20"
+            className="absolute bottom-0 right-0 h-10 w-10 transition-all duration-500 ease-expo hover:h-20 hover:w-20 sm:h-14 sm:w-14"
             style={{
               background:
                 "linear-gradient(315deg, #FBF8F2 0%, #FBF8F2 48%, rgba(16,24,40,0.28) 50%, rgba(16,24,40,0) 70%)",
@@ -186,8 +200,8 @@ function FinishSwitcher() {
       </div>
 
       {/* Swatch chooser */}
-      <div className="relative mt-11">
-        <div className="flex items-center justify-center gap-2.5 md:gap-3">
+      <div className="relative mt-9 sm:mt-11">
+        <div className="flex items-center justify-center gap-2 sm:gap-2.5 md:gap-3">
           {heroFinishes.map((f, i) => (
             <button
               key={f.id}
@@ -195,8 +209,10 @@ function FinishSwitcher() {
               onClick={() => setActive(i)}
               aria-label={`Show ${f.name}`}
               aria-pressed={i === active}
-              className={`relative h-11 w-11 overflow-hidden rounded-full ring-offset-2 ring-offset-ivory transition-all duration-500 ease-expo md:h-12 md:w-12 ${
-                i === active ? "scale-110 ring-2 ring-ink" : "opacity-80 ring-1 ring-ink/10 hover:scale-105 hover:opacity-100"
+              className={`relative h-9 w-9 overflow-hidden rounded-full ring-offset-2 ring-offset-ivory transition-all duration-500 ease-expo min-[400px]:h-10 min-[400px]:w-10 sm:h-11 sm:w-11 md:h-12 md:w-12 ${
+                i === active
+                  ? "scale-110 ring-2 ring-ink"
+                  : "opacity-80 ring-1 ring-ink/10 hover:scale-105 hover:opacity-100"
               }`}
             >
               <Image src={f.img} alt="" fill sizes="48px" className="object-cover" />
@@ -224,10 +240,21 @@ export default function Hero() {
   const copyY = useTransform(scrollYProgress, [0, 1], [0, 90]);
   const copyOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
   const blobY = useTransform(scrollYProgress, [0, 1], [0, 160]);
+
   // The sheet "falls" out of the hero — the story section below picks it up.
-  const cardY = useTransform(scrollYProgress, [0, 1], [0, 260]);
-  const cardRotate = useTransform(scrollYProgress, [0, 1], [0, 7]);
-  const cardOpacity = useTransform(scrollYProgress, [0, 0.6, 0.95], [1, 1, 0]);
+  // Desktop only: on stacked (mobile/tablet) layouts the sheet stays put so the
+  // swatches never slide under the next section.
+  const [isDesktop, setIsDesktop] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const set = () => setIsDesktop(mq.matches);
+    set();
+    mq.addEventListener("change", set);
+    return () => mq.removeEventListener("change", set);
+  }, []);
+  const cardY = useTransform(scrollYProgress, [0, 1], [0, isDesktop ? 260 : 0]);
+  const cardRotate = useTransform(scrollYProgress, [0, 1], [0, isDesktop ? 7 : 0]);
+  const cardOpacity = useTransform(scrollYProgress, [0, 0.6, 0.95], [1, 1, isDesktop ? 0 : 1]);
 
   const rise = (delay) => ({
     initial: { opacity: 0, y: 24 },
@@ -253,7 +280,7 @@ export default function Hero() {
         className="pointer-events-none absolute inset-0 -z-10 opacity-[0.5] [background-image:linear-gradient(to_right,rgba(16,24,40,0.05)_1px,transparent_1px)] [background-size:calc(100%/12)_100%] [mask-image:linear-gradient(to_bottom,black,transparent_85%)]"
       />
 
-      <div className="mx-auto grid max-w-7xl items-center gap-14 px-5 pb-20 md:px-10 lg:min-h-[calc(100svh-8rem)] lg:grid-cols-12 lg:gap-8 lg:pb-16">
+      <div className="mx-auto grid max-w-7xl items-center gap-14 px-5 pb-24 md:px-10 lg:min-h-[calc(100svh-8rem)] lg:grid-cols-12 lg:gap-8 lg:pb-16">
         <motion.div style={{ y: copyY, opacity: copyOpacity }} className="lg:col-span-7">
           <motion.div
             {...rise(0.1)}
