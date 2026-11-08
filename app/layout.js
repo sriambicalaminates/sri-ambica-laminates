@@ -74,7 +74,7 @@ const structuredData = {
   url: site.url,
   logo: `${site.url}/logo.png`,
   image: `${site.url}/og.jpg`,
-  telephone: "+917016079345",
+    telephone: "+916354531450",
   email: site.email,
   priceRange: "$$",
   address: {
